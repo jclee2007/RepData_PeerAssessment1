@@ -1,4 +1,10 @@
-# Reproducible Research: Peer Assessment 1
+---
+title: "Reproducible Research: Peer Assessment 1"
+output: 
+  html_document:
+    keep_md: true
+    self_contained: false
+---
 
 
 ## Loading and preprocessing the data
@@ -40,7 +46,7 @@ stepsdaily <- setNames(aggregate(Activity$steps,list(date=Activity$date),sum),c(
 hist(stepsdaily$steps, main = "Histogram of Steps Taken per Day", xlab = "")
 ```
 
-![](./PA1_template_files/figure-html/unnamed-chunk-2-1.png) 
+![plot of chunk unnamed-chunk-2](figure/unnamed-chunk-2-1.png) 
 
 ```r
 ##  Calculate mean and mediam across days
@@ -59,12 +65,19 @@ fivemin <- setNames(aggregate(Activity$steps,list(interval=Activity$dayhours),me
 
 ## Generate the plot
 suppressWarnings(library(ggplot2))
+```
+
+```
+## Use suppressPackageStartupMessages to eliminate package startup messages.
+```
+
+```r
 g <- ggplot(fivemin,aes(dayhours,steps))
 q <- g + geom_line(lwd=1) + labs(y="Avg Steps Taken",x="Time of Day (in Hours)",title="Daily Activity Pattern")
 q
 ```
 
-![](./PA1_template_files/figure-html/unnamed-chunk-3-1.png) 
+![plot of chunk unnamed-chunk-3](figure/unnamed-chunk-3-1.png) 
 
 ```r
 ## Get the hour of the day when max occurs
@@ -98,7 +111,7 @@ stepsdaily2 <- setNames(aggregate(Activity2$steps,list(date=Activity$date),sum),
 hist(stepsdaily2$steps, main = "Histogram of Steps Taken per Day", xlab = "")
 ```
 
-![](./PA1_template_files/figure-html/unnamed-chunk-5-1.png) 
+![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5-1.png) 
 
 ```r
 ##  Calculate mean and mediam across days
@@ -138,6 +151,6 @@ q <- g + geom_line(aes(color=DOW),lwd=1) + labs(y="Avg Steps Taken",x="Time of D
 q
 ```
 
-![](./PA1_template_files/figure-html/unnamed-chunk-6-1.png) 
+![plot of chunk unnamed-chunk-6](figure/unnamed-chunk-6-1.png) 
 
 Activity pattterns differs between Weekday and Weekend days  
