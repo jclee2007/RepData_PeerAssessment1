@@ -1,13 +1,9 @@
----
-title: "Reproducible Research: Peer Assessment 1"
-output: 
-  html_document:
-    keep_md: true
----
+# Reproducible Research: Peer Assessment 1
 
 
 ## Loading and preprocessing the data
-```{r}
+
+```r
 ## Set the working directory
 setwd("C:/Users/jlee/Documents/Data Science/Reproducible Research/")
 
@@ -31,29 +27,33 @@ dayhours <- round(hour(newdate)+minute(newdate)/60,2)
 
 ##  Add 2 new variables to the dataframe
 Activity <- cbind(Activity,newdate,dayhours)
-
 ```
 
 
 ## What is mean total number of steps taken per day?
-```{r echo=TRUE}
+
+```r
 ## Aggregate steps by day
 stepsdaily <- setNames(aggregate(Activity$steps,list(date=Activity$date),sum),c("date","steps"))
 
 ## Create histogram
 hist(stepsdaily$steps, main = "Histogram of Steps Taken per Day", xlab = "")
+```
 
+![](./PA1_template_files/figure-html/unnamed-chunk-2-1.png) 
+
+```r
 ##  Calculate mean and mediam across days
 meansteps <- format(mean(stepsdaily$steps,na.rm=TRUE),scientific=FALSE)
 mediansteps <- median(stepsdaily$steps,na.rm=TRUE)
-
 ```
-The mean steps taken per day is `r meansteps`    
-The median steps taken per day is `r mediansteps`
+The mean steps taken per day is 10766.19    
+The median steps taken per day is 10765
 
 
 ## What is the average daily activity pattern?
-```{r echo=TRUE}
+
+```r
 ##  Calculate mean steps for each 5 minute intervals during the day, expressed in hours of the day
 fivemin <- setNames(aggregate(Activity$steps,list(interval=Activity$dayhours),mean,na.rm=TRUE),c("dayhours","steps"))
 
@@ -62,25 +62,28 @@ suppressWarnings(library(ggplot2))
 g <- ggplot(fivemin,aes(dayhours,steps))
 q <- g + geom_line(lwd=1) + labs(y="Avg Steps Taken",x="Time of Day (in Hours)",title="Daily Activity Pattern")
 q
-
-## Get the hour of the day when max occurs
-themax <- fivemin[fivemin$steps == max(fivemin$steps),1]
-
 ```
 
-The hour of the day with the maximum number of steps is at: `r themax` hours
+![](./PA1_template_files/figure-html/unnamed-chunk-3-1.png) 
+
+```r
+## Get the hour of the day when max occurs
+themax <- fivemin[fivemin$steps == max(fivemin$steps),1]
+```
+
+The hour of the day with the maximum number of steps is at: 8.58 hours
 
 
 ## Imputing missing values
-```{r}
-totalna <- sum(is.na(Activity$steps))
 
+```r
+totalna <- sum(is.na(Activity$steps))
 ```
 
-There are `r totalna` observations/rows in the dataset with NAs step values
+There are 2304 observations/rows in the dataset with NAs step values
 
-```{r}
 
+```r
 ## Create new dataframe and impute NA values, using mean of the 5-minute interval
 Activity2 <- Activity
 for (i in 1:nrow(Activity2)) {
@@ -93,23 +96,27 @@ stepsdaily2 <- setNames(aggregate(Activity2$steps,list(date=Activity$date),sum),
 
 ## Create histogram
 hist(stepsdaily2$steps, main = "Histogram of Steps Taken per Day", xlab = "")
+```
 
+![](./PA1_template_files/figure-html/unnamed-chunk-5-1.png) 
+
+```r
 ##  Calculate mean and mediam across days
 meansteps2 <- format(mean(stepsdaily2$steps),scientific=FALSE)
 mediansteps2 <- format(median(stepsdaily2$steps),scientific=FALSE)
-
 ```
 
-With NAs filled, the mean steps taken per day is `r meansteps2`.  This is about the same as previous result.  
+With NAs filled, the mean steps taken per day is 10766.19.  This is about the same as previous result.  
 
-With NAs filled, the median steps taken per day is `r mediansteps2`.  This is slighly different than previous result.  
+With NAs filled, the median steps taken per day is 10766.19.  This is slighly different than previous result.  
 
 Imputing missing data does not have a meaningful impact on the total number of steps per day.  
 
 
 
 ## Are there differences in activity patterns between weekdays and weekends?
-```{r}
+
+```r
 ##  Create new dataset with Day of Week Variable starting with dataset with imputed values for NA steps
 Activity3 <- cbind(Activity2,weekdays(Activity2$date))
 colnames(Activity3)[6] <- "DOW"
@@ -129,7 +136,8 @@ suppressWarnings(library(ggplot2))
 g <- ggplot(fivemin2,aes(dayhours,steps))
 q <- g + geom_line(aes(color=DOW),lwd=1) + labs(y="Avg Steps Taken",x="Time of Day (in Hours)",title="Daily Activity Pattern\n(Weekday vs Weekend)") + facet_grid(DOW ~.)
 q
-
 ```
+
+![](./PA1_template_files/figure-html/unnamed-chunk-6-1.png) 
 
 Activity pattterns differs between Weekday and Weekend days  
