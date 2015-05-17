@@ -65,13 +65,6 @@ fivemin <- setNames(aggregate(Activity$steps,list(interval=Activity$dayhours),me
 
 ## Generate the plot
 suppressWarnings(library(ggplot2))
-```
-
-```
-## Use suppressPackageStartupMessages to eliminate package startup messages.
-```
-
-```r
 g <- ggplot(fivemin,aes(dayhours,steps))
 q <- g + geom_line(lwd=1) + labs(y="Avg Steps Taken",x="Time of Day (in Hours)",title="Daily Activity Pattern")
 q
